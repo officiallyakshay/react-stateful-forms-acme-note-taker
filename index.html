@@ -21,6 +21,30 @@
       const { Component, createElement } = React;
       const { HashRouter, Route, NavLink, Switch, Redirect } = ReactRouterDOM;
 
+      class Create extends Component {
+        constructor() {
+          super();
+          this.state = {
+            item: ''
+          };
+          this.create = this.create.bind(this);
+        }
+        create() {
+          this.props.onCreate(this.state.item)
+          this.props.history.push('/notes')
+        }
+        render() {
+          const { item } = this.state;
+          const { create } = this;
+          return (
+            <form onSubmit = { ev => ev.preventDefault() }>
+              <input name = 'item' value = { item } onChange = { ev => this.setState({ item: ev.target.value })} />
+              <button disabled = { !item } onClick = { create }>Create Note</button>
+            </form>
+          );
+        }
+      }
+
       const API = 'https://acme-users-api-rev.herokuapp.com/api/users/bb3d149a-db24-4d5e-843f-501f84cb8505/notes';
 
       const Notes = ({ match, notes }) => {
