@@ -101,15 +101,15 @@
             user: {}
           }
         }
-        onCreate(item) {
-          const notes = (await axios.post(`${API}/users/${user.id}/notes`)).data;
+        async onCreate(item) {
+          const updatedNotes = (await axios.post(`${API}/users/${user.id}/notes`)).data;
+          this.setState({ notes: [...this.state.notes]})
         }
 
         async componentDidMount() {
           const user = await fetchUser();
           const notes = (await axios.get(`${API}/users/${user.id}/notes`)).data;
           this.setState({ user, notes });
-          console.log(this.state)
         }
         render() {
           const { notes } = this.state;
