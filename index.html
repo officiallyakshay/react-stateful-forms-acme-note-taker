@@ -30,8 +30,8 @@
           this.create = this.create.bind(this);
         }
         create() {
-          this.props.onCreate(this.state.item)
-          this.props.history.push('/notes')
+          this.props.onCreate(this.state.item);
+          this.props.history.push('/notes');
         }
         render() {
           const { item } = this.state;
@@ -44,7 +44,6 @@
           );
         }
       }
-
 
     const API = 'https://acme-users-api-rev.herokuapp.com/api';
 
@@ -62,7 +61,7 @@
       }
       const user = (await axios.get(`${API}/users/random`)).data;
       storage.setItem('userId', user.id);
-      return  user;
+      return user;
     };
 
       const Notes = ({ match, notes }) => {
@@ -100,10 +99,11 @@
             notes: [],
             user: {}
           }
+          this.onCreate = this.OnCreate.bind(this);
         }
         async onCreate(item) {
-          const updatedNotes = (await axios.post(`${API}/users/${user.id}/notes`)).data;
-          this.setState({ notes: [...this.state.notes]})
+          const updatedNotes = (await axios.post(`${API}/users/${this.state.user.id}/notes`)).data;
+          this.setState({ updatedNotes: [...this.state.updatedNotes] })
         }
 
         async componentDidMount() {
