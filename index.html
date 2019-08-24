@@ -10,8 +10,51 @@
   </style>
   </head>
   <body>
+    <div id='root'></div>
     <script type='text/babel'>
-    
+      const { render } = ReactDOM;
+      const { Component, createElement } = React;
+      const { HashRouter, Route, NavLink, Switch, Redirect } = ReactRouterDOM;
+
+      const API = 'https://acme-users-api-rev.herokuapp.com/api/users/bb3d149a-db24-4d5e-843f-501f84cb8505/notes';
+      
+      const Nav = ({ notes }) => {
+        console.log(notes)
+        // const createdNotes = notes.filter( note => note.status === '')
+        return (
+          <nav>
+            <NavLink to='/notes'>Notes</NavLink>
+            <NavLink to='/notes/archived'>Archived</NavLink>
+            <NavLink to='/notes/create'>Create</NavLink>
+          </nav>
+        );
+      }
+
+      class App extends Component {
+        constructor() {
+          super();
+          this.state = {
+            notes: []
+          }
+        }
+        async componentDidMount({ notes }) {
+          await axios.get(API);
+          this.setState({ notes });
+        }
+        render() {
+          const { notes } = this.state;
+          return (
+            <HashRouter>
+              <Route render={ () => <Nav notes={notes} /> } />
+              <Switch>
+                <Route path='/notes' render= {} />
+              </Switch>
+            </HashRouter>
+          );
+        }
+      }
+      const root = document.querySelector('#root');
+      render( <App />, root )
     </script>
   </body>
 </html>
