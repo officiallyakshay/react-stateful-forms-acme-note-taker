@@ -6,10 +6,12 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.0.1/react-router-dom.js'></script>
   <style>
+
   nav {
     display: flex;
     justify-content: space-around;
   }
+
   </style>
   </head>
   <body>
@@ -22,7 +24,7 @@
       const API = 'https://acme-users-api-rev.herokuapp.com/api/users/bb3d149a-db24-4d5e-843f-501f84cb8505/notes';
 
       const Notes = ({ match, notes }) => {
-        console.log(match)
+        console.log(notes)
         const status = match.params.status;
         const filtered = notes.filter( note => note.status === status);
         return (
@@ -39,8 +41,7 @@
 
 
       const Nav = ({ notes }) => {
-        console.log(notes)
-        // const createdNotes = notes.filter( note => note.status === '')
+        const createdNotes = notes.filter( note => note.status === '')
         return (
           <nav>
             <NavLink to='/notes'>Notes</NavLink>
@@ -58,8 +59,8 @@
           }
         }
         async componentDidMount() {
-          await axios.get(API);
-          // this.setState({ notes });
+          const notes = (await axios.get(API)).data;
+          this.setState({ notes });
         }
         render() {
           const { notes } = this.state;
