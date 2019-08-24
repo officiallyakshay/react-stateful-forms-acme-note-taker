@@ -101,6 +101,10 @@
             user: {}
           }
         }
+        onCreate(item) {
+          const notes = (await axios.post(`${API}/users/${user.id}/notes`)).data;
+        }
+
         async componentDidMount() {
           const user = await fetchUser();
           const notes = (await axios.get(`${API}/users/${user.id}/notes`)).data;
