@@ -45,10 +45,28 @@
         }
       }
 
-      const API = 'https://acme-users-api-rev.herokuapp.com/api/users/bb3d149a-db24-4d5e-843f-501f84cb8505/notes';
+
+    const API = 'https://acme-users-api-rev.herokuapp.com/api';
+
+    const fetchUser = async ()=> {
+      const storage = window.localStorage;
+      const userId = storage.getItem('userId');
+      if(userId){
+        try {
+          return (await axios.get(`${API}/users/detail/${userId}`)).data;
+        }
+        catch(ex){
+          storage.removeItem('userId');
+          return fetchUser();
+        }
+      }
+      const user = (await axios.get(`${API}/users/random`)).data;
+      storage.setItem('userId', user.id);
+      return  user;
+    };
 
       const Notes = ({ match, notes }) => {
-        console.log(notes)
+        console.log(match)
         const status = match.params.status;
         const filtered = notes.filter( note => note.status === status);
         return (
@@ -79,12 +97,15 @@
         constructor() {
           super();
           this.state = {
-            notes: []
+            notes: [],
+            user: {}
           }
         }
         async componentDidMount() {
-          const notes = (await axios.get(API)).data;
-          this.setState({ notes });
+          const user = await fetchUser();
+          const notes = (await axios.get(`${API}/users/${user.id}/notes`)).data;
+          this.setState({ user, notes });
+          console.log(this.state)
         }
         render() {
           const { notes } = this.state;
