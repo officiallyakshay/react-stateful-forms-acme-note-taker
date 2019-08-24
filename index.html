@@ -109,10 +109,12 @@
         }
         render() {
           const { notes } = this.state;
+          const { onCreate } = this;
           return (
             <HashRouter>
               <Route render={ () => <Nav notes={notes} /> } />
               <Switch>
+                <Route path='/notes/create' render = {(props) => <Create onCreate={onCreate} /> } />
                 <Route path='/notes' render= { (props) => <Notes match = { props.match } notes = { notes }/> } />
               </Switch>
             </HashRouter>
